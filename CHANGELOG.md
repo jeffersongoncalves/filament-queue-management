@@ -6,7 +6,7 @@ All notable changes to `filament-queue-management` will be documented in this fi
 
 ### Added
 
-- Initial release for Filament v5.
+- Initial release for Filament v4.
 - `JobResource` to monitor and prune pending jobs in the `jobs` table.
 - `FailedJobResource` to monitor, retry and forget failed jobs in the `failed_jobs` table, with retry-all and flush-all header actions.
 - `JobBatchResource` to monitor job batches in the `job_batches` table (read-only).
