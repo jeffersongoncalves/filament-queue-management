@@ -10,7 +10,6 @@ use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Infolists\InfolistsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
-use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
@@ -21,8 +20,8 @@ use JeffersonGoncalves\Filament\QueueManagement\Tests\Fixtures\TestPanelProvider
 use JeffersonGoncalves\Filament\QueueManagement\Tests\Fixtures\TestUser;
 use JeffersonGoncalves\QueueManagement\QueueManagementServiceProvider;
 use Livewire\LivewireServiceProvider;
-use Livewire\Mechanisms\DataStore;
 use Orchestra\Testbench\TestCase as Orchestra;
+use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -31,14 +30,6 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         $this->setUpDatabase();
-
-        // Filament v5's SupportServiceProvider overrides Livewire's DataStore
-        // with DataStoreOverride using bind() instead of singleton(), causing a
-        // new instance (with its own WeakMap) on every resolve. This breaks
-        // getErrorBag() which stores/retrieves across different WeakMap
-        // instances. Fix: resolve once and re-register as a singleton instance.
-        $dataStore = app(DataStore::class);
-        app()->instance(DataStore::class, $dataStore);
 
         Filament::setCurrentPanel(Filament::getDefaultPanel());
 
@@ -51,8 +42,8 @@ abstract class TestCase extends Orchestra
             LivewireServiceProvider::class,
             BladeIconsServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
+            BladeCaptureDirectiveServiceProvider::class,
             SupportServiceProvider::class,
-            SchemasServiceProvider::class,
             FormsServiceProvider::class,
             TablesServiceProvider::class,
             ActionsServiceProvider::class,

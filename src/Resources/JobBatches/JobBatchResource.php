@@ -2,13 +2,11 @@
 
 namespace JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches;
 
-use BackedEnum;
-use Filament\Actions\ViewAction;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Panel;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Carbon;
@@ -21,10 +19,10 @@ class JobBatchResource extends Resource
 {
     protected static ?string $model = JobBatch::class;
 
-    public static function infolist(Schema $schema): Schema
+    public static function infolist(Infolist $infolist): Infolist
     {
-        return $schema
-            ->components([
+        return $infolist
+            ->schema([
                 Section::make()
                     ->columns(2)
                     ->schema([
@@ -53,14 +51,12 @@ class JobBatchResource extends Resource
                         TextEntry::make('failed_job_ids')
                             ->hiddenLabel()
                             ->formatStateUsing(fn ($state): string => self::formatJson($state))
-                            ->fontFamily('mono')
                             ->copyable(),
                     ]),
                 Section::make(__('filament-queue-management::filament-queue-management.column.options'))
                     ->schema([
                         TextEntry::make('options')
                             ->hiddenLabel()
-                            ->fontFamily('mono')
                             ->copyable(),
                     ]),
             ]);
@@ -95,7 +91,7 @@ class JobBatchResource extends Resource
                     ->formatStateUsing(fn ($state) => self::formatTimestamp($state)),
             ])
             ->defaultSort('created_at', 'desc')
-            ->recordActions([
+            ->actions([
                 ViewAction::make(),
             ]);
     }
@@ -133,12 +129,12 @@ class JobBatchResource extends Resource
         return Utils::getNavigationSort();
     }
 
-    public static function getNavigationIcon(): string|BackedEnum|null
+    public static function getNavigationIcon(): ?string
     {
         return Utils::getJobBatchesNavigationIcon();
     }
 
-    public static function getSlug(?Panel $panel = null): string
+    public static function getSlug(): string
     {
         return Utils::getJobBatchesSlug();
     }

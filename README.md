@@ -1,14 +1,14 @@
 <div class="filament-hidden">
 
-![Filament Queue Management](https://raw.githubusercontent.com/jeffersongoncalves/filament-queue-management/2.x/art/jeffersongoncalves-filament-queue-management.png)
+![Filament Queue Management](https://raw.githubusercontent.com/jeffersongoncalves/filament-queue-management/1.x/art/jeffersongoncalves-filament-queue-management.png)
 
 </div>
 
 # Filament Queue Management
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jeffersongoncalves/filament-queue-management.svg?style=flat-square)](https://packagist.org/packages/jeffersongoncalves/filament-queue-management)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-queue-management/tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/jeffersongoncalves/filament-queue-management/actions?query=workflow%3Atests+branch%3A2.x)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-queue-management/fix-php-code-style-issues.yml?branch=2.x&label=code%20style&style=flat-square)](https://github.com/jeffersongoncalves/filament-queue-management/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A2.x)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-queue-management/tests.yml?branch=1.x&label=tests&style=flat-square)](https://github.com/jeffersongoncalves/filament-queue-management/actions?query=workflow%3Atests+branch%3A1.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-queue-management/fix-php-code-style-issues.yml?branch=1.x&label=code%20style&style=flat-square)](https://github.com/jeffersongoncalves/filament-queue-management/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A1.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/jeffersongoncalves/filament-queue-management.svg?style=flat-square)](https://packagist.org/packages/jeffersongoncalves/filament-queue-management)
 [![License](https://img.shields.io/packagist/l/jeffersongoncalves/filament-queue-management.svg?style=flat-square)](LICENSE.md)
 
@@ -36,7 +36,7 @@ A Filament plugin to manage Laravel's database-driver queue tables (`jobs`, `fai
 You can install the package via composer (the `jeffersongoncalves/laravel-queue-management` core is pulled in automatically):
 
 ```bash
-composer require jeffersongoncalves/filament-queue-management:"^2.0"
+composer require jeffersongoncalves/filament-queue-management:"^1.0"
 ```
 
 You can publish the config file with:

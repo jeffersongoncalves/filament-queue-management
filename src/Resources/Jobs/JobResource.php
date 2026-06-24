@@ -2,17 +2,15 @@
 
 namespace JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs;
 
-use BackedEnum;
-use Filament\Actions\Action;
-use Filament\Actions\BulkAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\ViewAction;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
-use Filament\Panel;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -28,10 +26,10 @@ class JobResource extends Resource
 {
     protected static ?string $model = Job::class;
 
-    public static function infolist(Schema $schema): Schema
+    public static function infolist(Infolist $infolist): Infolist
     {
-        return $schema
-            ->components([
+        return $infolist
+            ->schema([
                 Section::make()
                     ->columns(2)
                     ->schema([
@@ -58,7 +56,6 @@ class JobResource extends Resource
                         TextEntry::make('payload')
                             ->hiddenLabel()
                             ->formatStateUsing(fn ($state): string => self::formatJson($state))
-                            ->fontFamily('mono')
                             ->copyable(),
                     ]),
             ]);
@@ -101,7 +98,7 @@ class JobResource extends Resource
                         ->unique()
                         ->all()),
             ])
-            ->recordActions([
+            ->actions([
                 ViewAction::make(),
                 Action::make('delete')
                     ->label(__('filament-queue-management::filament-queue-management.actions.delete.label'))
@@ -117,7 +114,7 @@ class JobResource extends Resource
                             ->send();
                     }),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
                     BulkAction::make('delete')
                         ->label(__('filament-queue-management::filament-queue-management.actions.delete.label'))
@@ -170,7 +167,7 @@ class JobResource extends Resource
         return Utils::getNavigationSort();
     }
 
-    public static function getNavigationIcon(): string|BackedEnum|null
+    public static function getNavigationIcon(): ?string
     {
         return Utils::getJobsNavigationIcon();
     }
@@ -180,7 +177,7 @@ class JobResource extends Resource
         return (string) static::getEloquentQuery()->count();
     }
 
-    public static function getSlug(?Panel $panel = null): string
+    public static function getSlug(): string
     {
         return Utils::getJobsSlug();
     }
