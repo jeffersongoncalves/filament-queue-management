@@ -2,6 +2,10 @@
 
 All notable changes to `filament-queue-management` will be documented in this file.
 
+## 2.0.0 - 2026-06-24
+
+Filament v4 support. Resources for jobs, failed_jobs and job_batches with retry, forget, flush and delete actions.
+
 ## Unreleased
 
 ### Added
