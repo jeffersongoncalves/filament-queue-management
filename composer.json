@@ -57,15 +57,6 @@
             "phpstan/extension-installer": true
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../../laravel/laravel-queue-management",
-            "options": {
-                "symlink": false
-            }
-        }
-    ],
     "extra": {
         "branch-alias": {
             "dev-1.x": "1.x-dev",
