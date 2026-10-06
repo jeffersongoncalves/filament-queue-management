@@ -2,6 +2,13 @@
 
 All notable changes to `filament-queue-management` will be documented in this file.
 
+## 2.1.1 - 2026-10-06
+
+### Fixed
+
+- Job / Failed Job payload is now rendered as readable, pretty-printed JSON instead of a flat comma-separated list that lost every key (#25).
+- Serialized values (`data.command`, log context) are expanded into readable objects using `unserialize` with `allowed_classes => false`, so no class is instantiated. Circular references and values JSON can't represent no longer break the view.
+
 ## 2.1.0 - 2026-09-23
 
 ### What's new
