@@ -30,6 +30,20 @@ it('strips visibility prefixes from protected and private properties', function 
     expect(Utils::decodePayload($command))->toBe(['__class' => 'Foo', 'queue' => 'mails', 'id' => 7]);
 });
 
+it('keeps the raw serialized string when it contains a circular reference', function () {
+    $object = new stdClass;
+    $object->self = $object;
+    $serialized = serialize($object);
+
+    expect(Utils::decodePayload(['command' => $serialized]))->toBe(['command' => $serialized]);
+});
+
+it('still renders the payload when a decoded value cannot be represented in JSON', function () {
+    expect(Utils::formatPayload(['uuid' => 'abc', 'command' => 'd:INF;'])->toHtml())
+        ->toContain('&quot;uuid&quot;: &quot;abc&quot;')
+        ->toContain('&quot;command&quot;: 0');
+});
+
 it('leaves non-serialized strings such as encrypted commands untouched', function () {
     expect(Utils::decodePayload('eyJpdiI6IjEyMyJ9'))->toBe('eyJpdiI6IjEyMyJ9')
         ->and(Utils::decodePayload('s:broken'))->toBe('s:broken')
