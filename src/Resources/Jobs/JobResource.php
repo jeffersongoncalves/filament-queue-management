@@ -18,6 +18,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\HtmlString;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs\Pages\ListJobs;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs\Pages\ViewJob;
 use JeffersonGoncalves\Filament\QueueManagement\Support\Utils;
@@ -57,9 +58,10 @@ class JobResource extends Resource
                     ->schema([
                         TextEntry::make('payload')
                             ->hiddenLabel()
-                            ->formatStateUsing(fn ($state): string => self::formatJson($state))
+                            ->state(fn (Job $record): HtmlString => Utils::formatPayload($record->payload))
                             ->fontFamily('mono')
-                            ->copyable(),
+                            ->copyable()
+                            ->copyableState(fn (Job $record): string => (string) json_encode($record->payload)),
                     ]),
             ]);
     }
@@ -192,10 +194,5 @@ class JobResource extends Resource
         }
 
         return Carbon::createFromTimestamp((int) $state)->toDateTimeString();
-    }
-
-    protected static function formatJson(mixed $state): string
-    {
-        return (string) json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 }
