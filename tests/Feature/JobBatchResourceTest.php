@@ -3,6 +3,7 @@
 use Illuminate\Support\Str;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches\JobBatchResource;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches\Pages\ListJobBatches;
+use JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches\Pages\ViewJobBatch;
 use JeffersonGoncalves\Filament\QueueManagement\Tests\Fixtures\TestUser;
 use JeffersonGoncalves\QueueManagement\Models\JobBatch;
 use Livewire\Livewire;
@@ -34,6 +35,24 @@ it('renders the list page and lists records', function () {
     Livewire::test(ListJobBatches::class)
         ->assertSuccessful()
         ->assertCanSeeTableRecords($batches);
+});
+
+it('renders the view page with decoded options and failed job ids', function () {
+    $batch = makeJobBatch();
+
+    Livewire::test(ViewJobBatch::class, ['record' => $batch->getKey()])
+        ->assertSuccessful()
+        ->assertSee('"allowFailures": true')
+        ->assertSee('"abc-123"');
+});
+
+it('decodes base64-encoded options stored by PostgreSQL connections', function () {
+    $batch = makeJobBatch();
+    $batch->forceFill(['options' => base64_encode(serialize(['queue' => 'imports']))])->save();
+
+    Livewire::test(ViewJobBatch::class, ['record' => $batch->getKey()])
+        ->assertSuccessful()
+        ->assertSee('"queue": "imports"');
 });
 
 it('exposes only index and view pages', function () {
