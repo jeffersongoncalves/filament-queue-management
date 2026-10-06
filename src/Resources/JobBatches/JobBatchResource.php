@@ -12,6 +12,8 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches\Pages\ListJobBatches;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\JobBatches\Pages\ViewJobBatch;
 use JeffersonGoncalves\Filament\QueueManagement\Support\Utils;
@@ -52,16 +54,19 @@ class JobBatchResource extends Resource
                     ->schema([
                         TextEntry::make('failed_job_ids')
                             ->hiddenLabel()
-                            ->formatStateUsing(fn ($state): string => self::formatJson($state))
+                            ->state(fn (JobBatch $record): HtmlString => Utils::formatPayload($record->failed_job_ids))
                             ->fontFamily('mono')
-                            ->copyable(),
+                            ->copyable()
+                            ->copyableState(fn (JobBatch $record): string => (string) json_encode($record->failed_job_ids)),
                     ]),
                 Section::make(__('filament-queue-management::filament-queue-management.column.options'))
                     ->schema([
                         TextEntry::make('options')
                             ->hiddenLabel()
+                            ->state(fn (JobBatch $record): HtmlString => Utils::formatPayload(self::decodeOptions($record->options)))
                             ->fontFamily('mono')
-                            ->copyable(),
+                            ->copyable()
+                            ->copyableState(fn (JobBatch $record): ?string => $record->options),
                     ]),
             ]);
     }
@@ -152,8 +157,13 @@ class JobBatchResource extends Resource
         return Carbon::createFromTimestamp((int) $state)->toDateTimeString();
     }
 
-    protected static function formatJson(mixed $state): string
+    protected static function decodeOptions(?string $options): ?string
     {
-        return (string) json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        // Laravel base64-encodes batch options on PostgreSQL (see DatabaseBatchRepository::serialize()).
+        if (filled($options) && ! Str::contains($options, [':', ';'])) {
+            return base64_decode($options, true) ?: $options;
+        }
+
+        return $options;
     }
 }
