@@ -2,6 +2,12 @@
 
 All notable changes to `filament-queue-management` will be documented in this file.
 
+## 1.1.2 - 2026-10-06
+
+### Fixed
+
+- Job Batch view: `failed_job_ids` is now rendered as a readable JSON list instead of comma-joined items, and `options` is shown as decoded, pretty-printed JSON instead of a raw PHP-serialized string, including the base64-encoded form stored on PostgreSQL (#29).
+
 ## 1.1.1 - 2026-10-06
 
 ### Fixed
