@@ -15,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\HtmlString;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\FailedJobs\Pages\ListFailedJobs;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\FailedJobs\Pages\ViewFailedJob;
 use JeffersonGoncalves\Filament\QueueManagement\Support\Utils;
@@ -50,8 +51,9 @@ class FailedJobResource extends Resource
                     ->schema([
                         TextEntry::make('payload')
                             ->hiddenLabel()
-                            ->formatStateUsing(fn ($state): string => self::formatJson($state))
-                            ->copyable(),
+                            ->state(fn (FailedJob $record): HtmlString => Utils::formatPayload($record->payload))
+                            ->copyable()
+                            ->copyableState(fn (FailedJob $record): string => (string) json_encode($record->payload)),
                     ]),
                 Section::make(__('filament-queue-management::filament-queue-management.column.exception'))
                     ->schema([
@@ -212,10 +214,5 @@ class FailedJobResource extends Resource
     public static function getSlug(): string
     {
         return Utils::getFailedJobsSlug();
-    }
-
-    protected static function formatJson(mixed $state): string
-    {
-        return (string) json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 }
