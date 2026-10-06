@@ -2,6 +2,7 @@
 
 use JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs\JobResource;
 use JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs\Pages\ListJobs;
+use JeffersonGoncalves\Filament\QueueManagement\Resources\Jobs\Pages\ViewJob;
 use JeffersonGoncalves\Filament\QueueManagement\Tests\Fixtures\TestUser;
 use JeffersonGoncalves\QueueManagement\Facades\QueueManagement;
 use JeffersonGoncalves\QueueManagement\Models\Job;
@@ -30,6 +31,22 @@ it('renders the list page and lists records', function () {
     Livewire::test(ListJobs::class)
         ->assertSuccessful()
         ->assertCanSeeTableRecords($jobs);
+});
+
+it('renders the view page with the decoded payload', function () {
+    $job = Job::create([
+        'queue' => 'default',
+        'attempts' => 0,
+        'payload' => [
+            'displayName' => 'App\\Jobs\\SendEmail',
+            'data' => ['command' => serialize((object) ['recipient' => 'someone@example.com'])],
+        ],
+    ]);
+
+    Livewire::test(ViewJob::class, ['record' => $job->getKey()])
+        ->assertSuccessful()
+        ->assertSee('"__class": "stdClass"')
+        ->assertSee('"recipient": "someone@example.com"');
 });
 
 it('deletes a pending job through the row action', function () {
