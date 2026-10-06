@@ -58,11 +58,9 @@ class Utils
     }
 
     /**
-     * Render a job payload as escaped, pretty-printed JSON inside a <pre> block.
-     *
-     * @param  array<mixed>|null  $payload
+     * Render a job payload (or any array / serialized string) as escaped, pretty-printed JSON inside a <pre> block.
      */
-    public static function formatPayload(?array $payload): HtmlString
+    public static function formatPayload(mixed $payload): HtmlString
     {
         try {
             $decoded = self::decodePayload($payload ?? []);
